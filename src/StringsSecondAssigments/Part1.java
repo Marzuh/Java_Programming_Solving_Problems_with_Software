@@ -1,5 +1,6 @@
 package StringsSecondAssigments;
 
+
 public class Part1
 {
 
@@ -58,16 +59,16 @@ public class Part1
             return "";
         }
 
-        int stopIndex=findStopCodon(dna, startIndex, "TAA");
+        int stopIndex=findStopCodon(dna, startIndex, "TAA")+3;
 
         if(stopIndex>findStopCodon(dna,startIndex,"TAG"))
         {
-            stopIndex=findStopCodon(dna,startIndex,"TAG");
+            stopIndex=findStopCodon(dna,startIndex,"TAG")+3;
         }
 
         if(stopIndex>findStopCodon(dna,startIndex,"TGA"))
         {
-            stopIndex=findStopCodon(dna,startIndex,"TGA");
+            stopIndex=findStopCodon(dna,startIndex,"TGA")+3;
         }
 
         if(stopIndex==dna.length())
@@ -83,13 +84,26 @@ public class Part1
 
     void testFindGene()
     {
-        String dna = "acaagtttgtacaaaaaagcagaagggccgtcaaggcccaccatgcctattggatccaaagagaggccaacattttttgaaatttttaagacacgctgcaacaaagcagatttaggaccaataagtcttaattggtttgaagaactttcttcagaagctccaccctataattctgaacctgcagaagaatctgaacataaaaacaacaattacgaaccaaacctatttaaaactccacaaaggaaaccatcttataatcagctggcttcaactccaataatattcaaagagcaagggctgactctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttagga";
+        String dna = "ATGTAAGATGCCCTAGT";
         System.out.println("DNA: " +findGene(dna));
 
     }
 
-    void printAllGene()
+    void printAllGene(String dna)
     {
+        int i=1;
+        String gene=findGene(dna);
+
+        while(true)
+        {
+            if(gene=="")
+            {
+                break;
+            }
+            System.out.println("Gene "+i+" "+gene);
+            gene=findGene(dna.substring(gene.length()));
+            i++;
+        }
 
     }
 
@@ -98,5 +112,7 @@ public class Part1
         Part1 test = new Part1();
         test.testFindStopCodon();
         test.testFindGene();
+        String dna="ATGTAAGATGCCCTAGT";
+        test.printAllGene(dna);
     }
 }
