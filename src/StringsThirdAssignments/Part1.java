@@ -50,7 +50,7 @@ public class Part1
         System.out.println("Index 4 = " + index);
     }
 
-    String findGene(String dna)
+    public String findGene(String dna)
     {
 
         int startIndex=dna.toUpperCase().indexOf("ATG");

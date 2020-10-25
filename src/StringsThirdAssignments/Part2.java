@@ -1,5 +1,8 @@
 package StringsThirdAssignments;
 
+import edu.duke.FileResource;
+import edu.duke.StorageResource;
+
 public class Part2
 {
 
@@ -41,7 +44,7 @@ public class Part2
             if (dna.toUpperCase().indexOf("CTG") >= 0)
             {
                 ctg++;
-                dna=dna.substring(3+dna.toUpperCase().indexOf("CTG"));
+                dna = dna.substring(3 + dna.toUpperCase().indexOf("CTG"));
             } else
             {
                 break;
@@ -52,15 +55,66 @@ public class Part2
 
     public void testCountCTG(String dna)
     {
-        System.out.println("Testing countTCG with DNA: "+dna);
-        System.out.println("TCG count: "+ countCTG(dna));
+        System.out.println("Testing countTCG with DNA: " + dna);
+        System.out.println("TCG count: " + countCTG(dna));
     }
 
+    //передаётся набор стрингов(по факту  1 стринга), в каждой стринге может быть несколько генов которые нужно найти и "вырезеть"
+    public void processGenes(StorageResource sr)
+    {
+        //инстанс Парт1 что бы можно было вызвать метод файнАллГенес()
+        Part1 temp = new Part1();
+        int longDnaCounter=0;
+        int cgRatioCounter=0;
+        String longestGene="";
+        //создаётся экземпляр генеЛист где будут сохранены гены
+        StorageResource geneList;
+        //построчно читаем ср
+        for (String g : sr.data())
+        {
+            //добавляем в генЛист новые гены
+            geneList =  temp.findAllGenes(g);
+            for(String gene : geneList.data())
+            {
+
+                if(gene.length()>9)
+                {
+                    System.out.print("The gene length is "+gene.length()+" and gene: ");
+                    System.out.println(gene);
+                    longDnaCounter++;
+                    System.out.println("The counter of genes longer than 9 is "+longDnaCounter);
+                }
+
+                if(cgRatio(gene)>0.35)
+                {
+                    System.out.println("Gene with cg ratio higher than 0.35 is "+gene);
+                    cgRatioCounter++;
+                    System.out.println("The counter of genes with cg ratio higher than 0.35 is "+cgRatioCounter);
+                }
+
+                if(gene.length()>longestGene.length())
+                {
+                    longestGene=gene;
+                }
+
+            }
+            System.out.println("The longest gene length is"+longestGene.length());
+        }
+    }
 
     public static void main(String[] args)
     {
         Part2 test = new Part2();
         test.testCGRatio("ATGCCATAG");
         test.testCountCTG("actctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttagga");
+
+        FileResource fr = new FileResource("brca1line.fa");
+        String dna = fr.asString();
+        StorageResource store = new StorageResource();
+        for (String s : fr.words())
+        {
+            store.add(s);
+        }
+        test.processGenes(store);
     }
 }
