@@ -6,26 +6,26 @@ public class Part1
 {
     int findStopCodon(String dna, int startIndex, String stopCodon)
     {
-        int index= 0;
+        int stopIndex = 0;
 
-        while(true)
+        while (true)
         {
             //
-            index = dna.toUpperCase().indexOf(stopCodon, startIndex + 3);
+            stopIndex = dna.toUpperCase().indexOf(stopCodon, startIndex);
 
-            //если стопКодон не найден или ??остаток от деления разности индекса и старого индекса равен нулю, то прервать
-            if (index == -1 || (index - startIndex) % 3 == 0)
+            //если стопКодон не найден или найденое слово укладывается в 1 кодон, а не находится в 2ух разных
+            //на данный момент когда стринга заканчивается, получается бяка, надо разбить на два иф. и подумать как закончить цикл
+            if (stopIndex == -1 || (stopIndex - startIndex) % 3 == 0)
             {
                 break;
             }
 
-            startIndex += 3;
+            startIndex = stopIndex + 3;
         }
-        if (index != -1)
+        if (stopIndex != -1)
         {
-            return index;
-        }
-        else
+            return stopIndex;
+        } else
         {
             return dna.length();
         }
@@ -53,31 +53,37 @@ public class Part1
     public String findGene(String dna)
     {
 
-        int startIndex=dna.toUpperCase().indexOf("ATG");
-        if(startIndex==-1)
+        int startIndex = dna.toUpperCase().indexOf("ATG");
+        if (startIndex == -1)
         {
             return "";
         }
 
-        int stopIndex=findStopCodon(dna, startIndex, "TAA")+3;
+        int taaStopIndex = findStopCodon(dna, startIndex, "TAA");
+        int tagStopIndex = findStopCodon(dna, startIndex, "TAG");
+        int tgaStopIndex = findStopCodon(dna, startIndex, "TGA");
 
-        if(stopIndex>findStopCodon(dna,startIndex,"TAG"))
+        //добавляем + 3 для того что бы конец стринга совпадал с концом гена
+        int stopIndex = taaStopIndex + 3;
+
+        if (stopIndex > tagStopIndex)
         {
-            stopIndex=findStopCodon(dna,startIndex,"TAG")+3;
+            stopIndex = tagStopIndex + 3;
         }
 
-        if(stopIndex>findStopCodon(dna,startIndex,"TGA"))
+        if (stopIndex > tgaStopIndex)
         {
-            stopIndex=findStopCodon(dna,startIndex,"TGA")+3;
+            stopIndex = tgaStopIndex + 3;
         }
 
-        if(stopIndex==dna.length())
+        if (stopIndex == dna.length())
         {
             return "";
         }
         else
         {
-            return dna.substring(startIndex,stopIndex);
+            System.out.println(dna.substring(startIndex, stopIndex));
+            return dna.substring(startIndex, stopIndex);
         }
 
     }
@@ -85,45 +91,51 @@ public class Part1
     void testFindGene()
     {
         String dna = "ATGTAAGATGCCCTAGT";
-        System.out.println("DNA: " +findGene(dna));
+        System.out.println("DNA: " + findGene(dna));
 
     }
 
     void printAllGene(String dna)
     {
-        int i=1;
-        String gene=findGene(dna);
+        int i = 1;
+        String gene = findGene(dna);
 
-        while(true)
+        while (true)
         {
-            if(gene=="")
+            if (gene == "")
             {
                 break;
             }
-            System.out.println("Gene "+i+" "+gene);
-            gene=findGene(dna.substring(gene.length()));
+            System.out.println("Gene " + i + " " + gene);
+            gene = findGene(dna.substring(gene.length()));
             i++;
         }
 
     }
 
 
-
-
     public StorageResource findAllGenes(String dna)
     {
         StorageResource geneList = new StorageResource();
-        int i=1;
-        String gene=findGene(dna);
-
-        while(true)
+        int i = 1;
+        String gene = findGene(dna);
+        while (true)
         {
-            if(gene=="")
+            if (gene == "")
             {
                 break;
             }
+            if(i==418)
+            {
+                System.out.println(i);
+            }
             geneList.add(gene);
-            gene=findGene(dna.substring(gene.length()));
+            dna = dna.substring(gene.length());
+            if(i==418)
+            {
+                System.out.println(i);
+            }
+            gene = findGene(dna);
             i++;
         }
         return geneList;
@@ -131,9 +143,9 @@ public class Part1
 
     public void testFindAllGenes(String dna)
     {
-        System.out.println("Testing findAllGenes with DNA: "+dna);
+        System.out.println("Testing findAllGenes with DNA: " + dna);
         StorageResource genes = findAllGenes(dna);
-        for(String g: genes.data())
+        for (String g : genes.data())
         {
             System.out.println(g);
         }
@@ -143,9 +155,9 @@ public class Part1
     {
         Part1 test = new Part1();
 
-        String dna="ATGATCTAATTTATGCTGCAACGGTGAAGA";
+        String dna = "ATGATCTAATTTATGCTGCAACGGTGAAGA";
         test.testFindAllGenes(dna);
-        dna="PJLJIGKGLHGMFJJI";
+        dna = "PJLJIGKGLHGMFJJI";
         test.testFindAllGenes(dna);
     }
 }

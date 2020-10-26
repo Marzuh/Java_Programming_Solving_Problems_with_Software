@@ -63,7 +63,7 @@ public class Part2
     public void processGenes(StorageResource sr)
     {
         //инстанс Парт1 что бы можно было вызвать метод файнАллГенес()
-        Part1 temp = new Part1();
+        Part1 tempPart1 = new Part1();
         int longDnaCounter=0;
         int cgRatioCounter=0;
         String longestGene="";
@@ -73,7 +73,10 @@ public class Part2
         for (String g : sr.data())
         {
             //добавляем в генЛист новые гены
-            geneList =  temp.findAllGenes(g);
+            //стринг г читается хорошо
+            //System.out.println(g);
+            geneList =  tempPart1.findAllGenes(g);
+            //System.out.println("gene list is ");
             for(String gene : geneList.data())
             {
 
@@ -104,11 +107,12 @@ public class Part2
 
     public static void main(String[] args)
     {
+        //тут работает
         Part2 test = new Part2();
         test.testCGRatio("ATGCCATAG");
         test.testCountCTG("actctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttagga");
-
-        FileResource fr = new FileResource("brca1line.fa");
+        //тут не работает
+        FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/brca1line.fa");
         String dna = fr.asString();
         StorageResource store = new StorageResource();
         for (String s : fr.words())
