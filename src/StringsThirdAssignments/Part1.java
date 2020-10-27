@@ -14,10 +14,15 @@ public class Part1
             stopIndex = dna.toUpperCase().indexOf(stopCodon, startIndex);
 
             //если стопКодон не найден или найденое слово укладывается в 1 кодон, а не находится в 2ух разных
-            //на данный момент когда стринга заканчивается, получается бяка, надо разбить на два иф. и подумать как закончить цикл
-            if (stopIndex == -1 || (stopIndex - startIndex) % 3 == 0)
+            //на данный момент когда стринга заканчивается, получаramется бяка, надо разбить на два иф. и подумать как закончить цикл
+            if ((stopIndex - startIndex) % 3 == 0)
             {
                 break;
+            }
+            if (stopIndex == -1)
+            {
+                System.out.println("No stop codon");
+                return -1;
             }
 
             startIndex = stopIndex + 3;
@@ -64,26 +69,25 @@ public class Part1
         int tgaStopIndex = findStopCodon(dna, startIndex, "TGA");
 
         //добавляем + 3 для того что бы конец стринга совпадал с концом гена
-        int stopIndex = taaStopIndex + 3;
+        int stopIndex = taaStopIndex;
 
-        if (stopIndex > tagStopIndex)
+        if (stopIndex > tagStopIndex && tagStopIndex != -1)
         {
-            stopIndex = tagStopIndex + 3;
+            stopIndex = tagStopIndex;
         }
 
-        if (stopIndex > tgaStopIndex)
+        if (stopIndex > tgaStopIndex && tgaStopIndex != -1)
         {
-            stopIndex = tgaStopIndex + 3;
+            stopIndex = tgaStopIndex;
         }
 
-        if (stopIndex == dna.length())
+        if (stopIndex == dna.length()||stopIndex==-1)
         {
             return "";
-        }
-        else
+        } else
         {
-            System.out.println(dna.substring(startIndex, stopIndex));
-            return dna.substring(startIndex, stopIndex);
+            System.out.println(dna.substring(startIndex, stopIndex + 3));
+            return dna.substring(startIndex, stopIndex + 3);
         }
 
     }
@@ -125,17 +129,18 @@ public class Part1
             {
                 break;
             }
-            if(i==418)
+            if (i == 418)
             {
                 System.out.println(i);
             }
             geneList.add(gene);
             dna = dna.substring(gene.length());
-            if(i==418)
-            {
-                System.out.println(i);
-            }
             gene = findGene(dna);
+            if (gene == "")
+            {
+                System.out.println("Empty gene");
+                break;
+            }
             i++;
         }
         return geneList;

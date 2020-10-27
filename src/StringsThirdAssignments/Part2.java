@@ -101,7 +101,7 @@ public class Part2
                 }
 
             }
-            System.out.println("The longest gene length is"+longestGene.length());
+            System.out.println("The longest gene length is "+longestGene.length());
         }
     }
 
