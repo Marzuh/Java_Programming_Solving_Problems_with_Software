@@ -66,6 +66,7 @@ public class Part2
         Part1 tempPart1 = new Part1();
         int longDnaCounter=0;
         int cgRatioCounter=0;
+        int dnaCounter=0;
         String longestGene="";
         //создаётся экземпляр генеЛист где будут сохранены гены
         StorageResource geneList;
@@ -73,19 +74,16 @@ public class Part2
         for (String g : sr.data())
         {
             //добавляем в генЛист новые гены
-            //стринг г читается хорошо
-            //System.out.println(g);
             geneList =  tempPart1.findAllGenes(g);
-            //System.out.println("gene list is ");
             for(String gene : geneList.data())
             {
 
-                if(gene.length()>9)
+                if(gene.length()>60)
                 {
                     System.out.print("The gene length is "+gene.length()+" and gene: ");
                     System.out.println(gene);
                     longDnaCounter++;
-                    System.out.println("The counter of genes longer than 9 is "+longDnaCounter);
+                    System.out.println("The counter of genes longer than 60 is "+longDnaCounter);
                 }
 
                 if(cgRatio(gene)>0.35)
@@ -100,8 +98,11 @@ public class Part2
                     longestGene=gene;
                 }
 
+                dnaCounter++;
             }
             System.out.println("The longest gene length is "+longestGene.length());
+            System.out.println("Total gene count is "+dnaCounter);
+            System.out.println("total genes longer than 60 "+longDnaCounter);
         }
     }
 
