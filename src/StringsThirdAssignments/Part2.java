@@ -77,20 +77,22 @@ public class Part2
             geneList =  tempPart1.findAllGenes(g);
             for(String gene : geneList.data())
             {
-
+                dnaCounter++;
+                System.out.println(dnaCounter +" : " + gene);
                 if(gene.length()>60)
-                {
-                    System.out.print("The gene length is "+gene.length()+" and gene: ");
-                    System.out.println(gene);
+                {                dnaCounter++;
+
+                    //System.out.print("The gene length is "+gene.length()+" and gene: ");
+                    //System.out.println(gene);
                     longDnaCounter++;
-                    System.out.println("The counter of genes longer than 60 is "+longDnaCounter);
+                    //System.out.println("The counter of genes longer than 60 is "+longDnaCounter);
                 }
 
                 if(cgRatio(gene)>0.35)
                 {
-                    System.out.println("Gene with cg ratio higher than 0.35 is "+gene);
+                    //System.out.println("Gene with cg ratio higher than 0.35 is "+gene);
                     cgRatioCounter++;
-                    System.out.println("The counter of genes with cg ratio higher than 0.35 is "+cgRatioCounter);
+                    //System.out.println("The counter of genes with cg ratio higher than 0.35 is "+cgRatioCounter);
                 }
 
                 if(gene.length()>longestGene.length())
@@ -98,7 +100,6 @@ public class Part2
                     longestGene=gene;
                 }
 
-                dnaCounter++;
             }
             System.out.println("The longest gene length is "+longestGene.length());
             System.out.println("Total gene count is "+dnaCounter);
@@ -110,8 +111,9 @@ public class Part2
     {
         //тут работает
         Part2 test = new Part2();
-        test.testCGRatio("ATGCCATAG");
-        test.testCountCTG("actctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttagga");
+        //test.testCGRatio("ATGCCATAG");
+        //test.testCountCTG("actctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttagga");
+        System.out.println("start");
         //тут не работает
         FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/brca1line.fa");
         String dna = fr.asString();

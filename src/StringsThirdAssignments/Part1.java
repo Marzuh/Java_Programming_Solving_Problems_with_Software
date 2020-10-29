@@ -10,18 +10,14 @@ public class Part1
 
         while (true)
         {
-            //
             stopIndex = dna.toUpperCase().indexOf(stopCodon, startIndex);
 
-            //если стопКодон не найден или найденое слово укладывается в 1 кодон, а не находится в 2ух разных
-            //на данный момент когда стринга заканчивается, получаramется бяка, надо разбить на два иф. и подумать как закончить цикл
             if ((stopIndex - startIndex) % 3 == 0)
             {
                 break;
             }
             if (stopIndex == -1)
             {
-                System.out.println("No stop codon");
                 return -1;
             }
 
@@ -30,7 +26,8 @@ public class Part1
         if (stopIndex != -1)
         {
             return stopIndex;
-        } else
+        }
+        else
         {
             return dna.length();
         }
@@ -86,8 +83,8 @@ public class Part1
             return "";
         } else
         {
-            System.out.println(dna.substring(startIndex, stopIndex + 3));
-            return dna.substring(startIndex, stopIndex + 3);
+            //System.out.println(dna.substring(startIndex, stopIndex + 3));
+            return dna.substring(startIndex, stopIndex+3);
         }
 
     }
@@ -123,6 +120,7 @@ public class Part1
         StorageResource geneList = new StorageResource();
         int i = 1;
         String gene = findGene(dna);
+        System.out.println("[debug] First gene is: "+ gene);
         while (true)
         {
             if (gene == "")
@@ -136,6 +134,8 @@ public class Part1
             geneList.add(gene);
             dna = dna.substring(gene.length());
             gene = findGene(dna);
+            System.out.println("[debug] gene "+i+" "+gene);
+            System.out.println("Dna length is "+ dna.length());
             if (gene == "")
             {
                 System.out.println("Empty gene");
