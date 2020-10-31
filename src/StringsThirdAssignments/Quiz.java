@@ -1,5 +1,6 @@
 package StringsThirdAssignments;
 
+import edu.duke.FileResource;
 import edu.duke.StorageResource;
 
 public class Quiz
@@ -19,10 +20,10 @@ public class Quiz
     public int findStopCodon(String dna, int startIndex, String stopCodon)
     {
         int stopIndex = 0;
-
+        int stopIndexStart=startIndex;
         while (true)
         {
-            stopIndex = dna.toUpperCase().indexOf(stopCodon, startIndex);
+            stopIndex = dna.toUpperCase().indexOf(stopCodon, stopIndexStart);
 
             //если стопКодона не найдено возвращаем -1
             if (stopIndex == -1)
@@ -37,7 +38,7 @@ public class Quiz
             }
 
             //если найденное слово не подходит, ищем дальше начиная со следующего слова после предидущего
-            startIndex = stopIndex + 3;
+            stopIndexStart = stopIndex + 3;
         }
 
         return stopIndex;
@@ -65,13 +66,12 @@ public class Quiz
         {
             stopIndex = tgaStopIndex;
         }
-        if ((stopIndex==-1) || (stopIndex > tagStopIndex) && tagStopIndex != -1)
+        if ((stopIndex == -1) || (stopIndex > tagStopIndex) && tagStopIndex != -1)
         {
             stopIndex = tagStopIndex;
         }
 
-        //вставить проверку если стопкодон совсем не найдет, то вернуть пустой стринг
-        if(stopIndex==-1)
+        if (stopIndex == -1)
         {
             return "";
         }
@@ -85,23 +85,97 @@ public class Quiz
         System.out.println("single dna: " + findSingleGene(dna));
     }
 
-    public StorageResource findAllGenes()
+    public StorageResource findAllGenes(String dna)
     {
+        //создаём список, ищем ген, если ген найдет отрезаем дна спереди на длину гена(НБ. не забыть что ген может
+        //начинаться не с первого символа!!), повторить, если возвращает пустой ген, то закончить
         StorageResource geneList = new StorageResource();
+        String singleGene;
+        int i = 1;
+        while (true)
+        {
+            singleGene = findSingleGene(dna);
+            System.out.println(i + " : " + singleGene+" and its length is "+singleGene.length());
+            i++;
+            if (singleGene == "")
+            {
+                break;
+            }
+            geneList.add(singleGene);
+            dna = dna.substring(dna.indexOf(singleGene) + singleGene.length());
+        }
         return geneList;
     }
 
-    public void processGene()
+    public void testFindAllGenes()
     {
+        String dna = "acaagtttgtacaaaaaagcagaagggccgtcaaggcccaccatgcctattggatccaaagagaggccaacattttttgaaatttttaagacacgctgcaacaaagcagatttaggaccaataagtcttaattggtttgaagaactttcttcagaagctccaccctataattctgaacctgcagaagaatctgaacataaaaacaacaattacgaaccaaacctatttaaaactccacaaaggaaaccatcttataatcagctggcttcaactccaataatattcaaagagcaagggctgactctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttaggaaggaatgttcccaatagtagacataaaagtcttcgcacagtgaaaactaaaatggatcaa";
+        findAllGenes(dna);
+    }
 
+    public float cgRatio(String dna)
+    {
+        if (dna.length() == 0)
+        {
+            System.out.println("Empty dna");
+            return 0;
+        }
+        int cg = 0;
+        for (int i = 0; i < dna.length(); i++)
+        {
+            if (dna.toUpperCase().charAt(i) == 'C' || dna.toUpperCase().charAt(i) == 'G')
+            {
+                cg++;
+            }
+        }
+        return (float) cg / dna.length();
+    }
+
+    public void processGene(StorageResource sr) //передадут метод файнАллГенес
+    {
+        StorageResource geneList = new StorageResource();
+        for (String g : sr.data())
+        {
+            geneList = findAllGenes(g);
+        }
+        int dnaCounter = 0, longDnaCounter = 0, cgRatioCounter = 0;
+        for (String gene : geneList.data())
+        {
+            dnaCounter++;
+
+            if (gene.length() > 60)
+            {
+                longDnaCounter++;
+            }
+
+            if (cgRatio(gene) > 0.35)
+            {
+                cgRatioCounter++;
+            }
+
+        }
+        System.out.println("Genes at all are " + dnaCounter);
+        System.out.println("Genes longer than 60 are" + longDnaCounter);
+        System.out.println("Genes with high cg ratio are " + cgRatioCounter);
     }
 
     public static void main(String[] args)
     {
         Quiz test = new Quiz();
-        test.testFindStartCodon();
-        test.testFindStopCodon();
-        test.testFindSingleGene();
+        //test.testFindStartCodon();
+        //test.testFindStopCodon();
+        //test.testFindSingleGene();
+        test.testFindAllGenes();
+
+        //Reading from file
+        FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/brca1line.fa");
+        String dna = fr.asString();
+        StorageResource store = new StorageResource();
+        for (String s : fr.words())
+        {
+            store.add(s);
+        }
+        //test.processGene(store);
     }
 
 }
