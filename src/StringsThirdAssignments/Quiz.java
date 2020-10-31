@@ -20,28 +20,22 @@ public class Quiz
     public int findStopCodon(String dna, int startIndex, String stopCodon)
     {
         int stopIndex = 0;
-        int stopIndexStart=startIndex;
-        while (true)
+        int stopIndexStart=startIndex+3;
+        while (stopIndex!=-1)
         {
             stopIndex = dna.toUpperCase().indexOf(stopCodon, stopIndexStart);
-
-            //если стопКодона не найдено возвращаем -1
-            if (stopIndex == -1)
-            {
-                return -1;
-            }
 
             //если найден стоп кодон и отсутсвует сдвиг относительно стартового кодона, выйти из цикла
             if ((stopIndex - startIndex) % 3 == 0)
             {
-                break;
+                return stopIndex;
             }
 
             //если найденное слово не подходит, ищем дальше начиная со следующего слова после предидущего
-            stopIndexStart = stopIndex + 3;
+            stopIndexStart = stopIndex + 1;
         }
 
-        return stopIndex;
+        return -1;
     }
 
     public void testFindStopCodon()
@@ -165,7 +159,7 @@ public class Quiz
         //test.testFindStartCodon();
         //test.testFindStopCodon();
         //test.testFindSingleGene();
-        test.testFindAllGenes();
+        //test.testFindAllGenes();
 
         //Reading from file
         FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/brca1line.fa");
@@ -175,7 +169,7 @@ public class Quiz
         {
             store.add(s);
         }
-        //test.processGene(store);
+        test.processGene(store);
     }
 
 }
