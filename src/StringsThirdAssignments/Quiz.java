@@ -20,8 +20,8 @@ public class Quiz
     public int findStopCodon(String dna, int startIndex, String stopCodon)
     {
         int stopIndex = 0;
-        int stopIndexStart=startIndex+3;
-        while (stopIndex!=-1)
+        int stopIndexStart = startIndex + 3;
+        while (stopIndex != -1)
         {
             stopIndex = dna.toUpperCase().indexOf(stopCodon, stopIndexStart);
 
@@ -32,7 +32,7 @@ public class Quiz
             }
 
             //если найденное слово не подходит, ищем дальше начиная со следующего слова после предидущего
-            stopIndexStart = stopIndex + 1;
+            stopIndexStart = stopIndex + 3;
         }
 
         return -1;
@@ -40,8 +40,9 @@ public class Quiz
 
     public void testFindStopCodon()
     {
-        String dna = "acaagtttgtacaaaaaagcagaagggccgtcaaggcccaccatgcctattggatccaaagagaggccaacattttttgaaatttttaagacacgctgcaacaaagcagatttaggaccaataagtcttaattggtttgaagaactttcttcagaagctccaccctataattctgaacctgcagaagaatctgaacataaaaacaacaattacgaaccaaacctatttaaaactccacaaaggaaaccatcttataatcagctggcttcaactccaataatattcaaagagcaagggctgactctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttaggaaggaatgttcccaatagtagacataaaagtcttcgcacagtgaaaactaaaatggatcaa";
-        System.out.println("TAA " + findStopCodon(dna, 42, "TAA"));
+        //String dna = "acaagtttgtacaaaaaagcagaagggccgtcaaggcccaccatgcctattggatccaaagagaggccaacattttttgaaatttttaagacacgctgcaacaaagcagatttaggaccaataagtcttaattggtttgaagaactttcttcagaagctccaccctataattctgaacctgcagaagaatctgaacataaaaacaacaattacgaaccaaacctatttaaaactccacaaaggaaaccatcttataatcagctggcttcaactccaataatattcaaagagcaagggctgactctgccgctgtaccaatctcctgtaaaagaattagataaattcaaattagacttaggaaggaatgttcccaatagtagacataaaagtcttcgcacagtgaaaactaaaatggatcaa";
+        String dna = "aatgabctaa";
+        System.out.println("TAA " + findStopCodon(dna, 1, "TAA"));
         System.out.println("TGA " + findStopCodon(dna, 42, "TGA"));
         System.out.println("TAG " + findStopCodon(dna, 42, "TAG"));
         System.out.println("42000 " + findStopCodon(dna, 42000, "TAA"));
@@ -89,7 +90,7 @@ public class Quiz
         while (true)
         {
             singleGene = findSingleGene(dna);
-            System.out.println(i + " : " + singleGene+" and its length is "+singleGene.length());
+            //System.out.println(i + " : " + singleGene + " and its length is " + singleGene.length());
             i++;
             if (singleGene == "")
             {
@@ -125,17 +126,39 @@ public class Quiz
         return (float) cg / dna.length();
     }
 
+    public int ctgCounter(String dna)
+    {
+        int position=0, counter=0;
+        while (true)
+        {
+            if (dna.toUpperCase().indexOf("CTG") >= 0)
+            {
+                counter++;
+                dna = dna.substring(3 + dna.toUpperCase().indexOf("CTG"));
+            } else
+            {
+                break;
+            }
+        }
+        return counter;
+    }
+
     public void processGene(StorageResource sr) //передадут метод файнАллГенес
     {
         StorageResource geneList = new StorageResource();
         for (String g : sr.data())
         {
             geneList = findAllGenes(g);
+            System.out.println("CTG codon counter = "+ctgCounter(g));
         }
-        int dnaCounter = 0, longDnaCounter = 0, cgRatioCounter = 0;
+        int dnaCounter = 0, longDnaCounter = 0, cgRatioCounter = 0, longestLength=0;
         for (String gene : geneList.data())
         {
             dnaCounter++;
+            if(longestLength<gene.length())
+            {
+                longestLength=gene.length();
+            }
 
             if (gene.length() > 60)
             {
@@ -151,6 +174,7 @@ public class Quiz
         System.out.println("Genes at all are " + dnaCounter);
         System.out.println("Genes longer than 60 are" + longDnaCounter);
         System.out.println("Genes with high cg ratio are " + cgRatioCounter);
+        System.out.println("Longest gene lenght is "+ longestLength);
     }
 
     public static void main(String[] args)
@@ -162,7 +186,7 @@ public class Quiz
         //test.testFindAllGenes();
 
         //Reading from file
-        FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/brca1line.fa");
+        FileResource fr = new FileResource("/home/marzuh/IdeaProjects/Java_Programming_Solving_Problems_with_Software/src/StringsThirdAssignments/GRch38dnapart.fa");
         String dna = fr.asString();
         StorageResource store = new StorageResource();
         for (String s : fr.words())

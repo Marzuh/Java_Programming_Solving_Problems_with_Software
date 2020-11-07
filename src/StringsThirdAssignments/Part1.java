@@ -11,7 +11,7 @@ public class Part1
         while (true)
         {
             stopIndex = dna.toUpperCase().indexOf(stopCodon, startIndex);
-
+https://github.com/Marzuh/Java_Programming_Solving_Problems_with_Software/blob/quiz/src/StringsThirdAssignments/Quiz.java
             if ((stopIndex - startIndex) % 3 == 0)
             {
                 break;
