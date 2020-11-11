@@ -108,6 +108,48 @@ public class Exercise2
         return lowestHumidity;
     }
 
+    public CSVRecord lowestHumidityInManyFiles()
+    {
+        CSVRecord lowestHumidity = null;
+        DirectoryResource dr = new DirectoryResource();
+
+        for (File f : dr.selectedFiles())
+        {
+            FileResource fr = new FileResource(f);
+
+            for (CSVRecord currentRow : fr.getCSVParser())
+            {
+                if (currentRow.equals("N/A") || currentRow.equals(""))//isNumeric
+                {
+                    break;
+                } else
+                {
+                    if (lowestHumidity == null)
+                    {
+                        lowestHumidity = currentRow;
+                    } else
+                    {
+                        double currentHum = Double.parseDouble(currentRow.get("Humidity"));
+                        double lowestHum = Double.parseDouble(lowestHumidity.get("Humidity"));
+                        if (currentHum < lowestHum)
+                        {
+                            lowestHumidity = currentRow;
+                        }
+                    }
+                }
+
+            }
+
+        }
+        return lowestHumidity;
+    }
+
+    public void testLowestHumidityInManyFiles()
+    {
+        CSVRecord record = lowestHumidityInManyFiles();
+        System.out.println("Lowest humidity is "+record.get("Humidity")+" at "+record.get("DateUTC"));
+    }
+
     public void testLowestHumidityInFile()
     {
         FileResource fr = new FileResource();
@@ -121,6 +163,7 @@ public class Exercise2
         Exercise2 ex2 = new Exercise2();
         //ex2.testColdestHourInFile();
         //ex2.testFileWithColdestTemperature();
-        ex2.testLowestHumidityInFile();
+        //ex2.testLowestHumidityInFile();
+        ex2.testLowestHumidityInManyFiles();
     }
 }
